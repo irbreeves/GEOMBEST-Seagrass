@@ -1,0 +1,275 @@
+function [stable_range] = plot_marshwidthfreq(run,realistic)
+
+close all
+% 
+if realistic == 1
+    perc = 0.425;
+    file = 'Realistic marsh width';
+else
+    perc = 0.425;
+    file = 'Marsh width';
+end
+% 
+% % Read and plot marsh widths from modern experiments
+no_marsh = xlsread(['../Walters/' num2str(run) 'Modern runs/' file],'A2:G1001');
+narrow_marsh = xlsread(['../Walters/' num2str(run) 'Modern runs/' file],'I2:O1001');
+wide_marsh = xlsread(['../Walters/' num2str(run) 'Modern runs/' file],'Q2:W1001');
+all_widths = [no_marsh ; narrow_marsh ; wide_marsh];
+% 
+% init_widths = [10 400 1925];
+% 
+% %%%%%%%% First, plot the total frequency distribution %%%%%%%%%%
+% fh2 = figure;
+% hold on
+% 
+%  % Set x- and y-limits and label the axes on the plot
+% [nn,x] = hist(all_widths(:,5),100);
+% upper_y = max(nn) * 1.15;
+% set(gca,'XLim',[-50 2000])
+% set(gca,'YLim',[0 upper_y+1.18])
+% ylabel('Frequency','FontSize',25); 
+% xlabel('Backbarrier marsh width (m)','FontSize',25);
+% 
+% % Find the location of the peaks and the range of the stable states
+% pks = findpeaks2(nn,3,perc);
+% 
+% % Plot a grey box for the range of stable widths around each peak
+% stable_range = zeros(3,2);
+% for n = 1:3
+%     xx = [x(pks(n,2))-13 x(pks(n,2))-13 x(pks(n,3))+13 x(pks(n,3))+13];
+%     yy = [0 upper_y upper_y 0];
+%     h = fill(xx,yy,[.75 .75 .75]);
+%     set(h,'edgecolor',[.75 .75 .75])
+%     stable_range(n,:) = [xx(1) xx(4)];
+% end
+% 
+% hist(all_widths(:,5),100)
+% 
+% % Plot the location of the initial conditions
+% for n = 1:3
+%     plot([init_widths(n) init_widths(n)],[0 upper_y],'--k','LineWidth',1.5)
+% %     plot([x(pks(n,2)) x(pks(n,2))],[0 upper_y],'--k','LineWidth',1.5)
+% end
+% 
+% set(gca,'FontSize',16)
+% set(fh2,'units','normalized','position',[.1 .1 .8 .8], 'PaperPositionMode', 'auto');
+% box on
+% 
+% % Save the plots
+% saveas(fh2, ['../Walters/' num2str(run) 'Modern runs/' file ' frequency_all.fig']) 
+% outputfilename = ['../Walters/' num2str(run) 'Modern runs/' file ' frequency_all'];
+% print('-dpng',outputfilename)
+% 
+% %%%%%%%%%% Next, plot the freuqnecy distribution for each initial%%%%%%%%%%
+% %%%%%%%%%% condition, all in the same figure window %%%%%%%%%
+% fh = figure;
+% hold on
+% 
+% % Determine the uppermost limit of the three plots
+% nn = zeros(100,3);
+% [nn(:,1),x1] = hist(no_marsh(:,5),100);
+% [nn(:,2),x2] = hist(narrow_marsh(:,5),100);
+% [nn(:,3),x3] = hist(wide_marsh(:,5),100);
+% 
+% % Set the x- and y-limits and label the plots
+% titles = {'Initially no marsh' 'Initially narrow marsh' 'Initially wide marsh'};
+% for ni = 1:3
+%     upper_y = (max(nn(:,ni)))*1.15;
+%     subplot(3,1,ni)
+%     hold on
+%     text(600,upper_y*2/3,titles(ni),'FontSize',25)
+%     set(gca,'XLim',[-50 2000],'YLim',[0 upper_y*1.01],'FontSize',16)
+%     box on
+%     % Plot a grey box for the range of stable widths around each peak
+%     for n = 1:3
+%         xx = [x(pks(n,2))-13 x(pks(n,2))-13 x(pks(n,3))+13 x(pks(n,3))+13];
+%         yy = [0 upper_y upper_y 0];
+%         h = fill(xx,yy,[.75 .75 .75]);
+%         set(h,'edgecolor',[.75 .75 .75])
+%     end
+% end
+% 
+% subplot(3,1,1)
+% hist(no_marsh(:,5),100) % No marsh
+% subplot(3,1,2)
+% hist(narrow_marsh(:,5),100) % Narrow marsh
+% subplot(3,1,3)
+% hist(wide_marsh(:,5),100) % Wide marsh
+% 
+% 
+% subplot(3,1,2)
+% ylabel('Frequency','FontSize',25);
+% subplot(3,1,3)
+% xlabel('Backbarrier marsh width (m)','FontSize',25);
+% 
+% % Plot the location of the initial conditions
+% for n = 1:3
+%     subplot(3,1,n)
+%     hold on
+%     plot([init_widths(n) init_widths(n)],[0 upper_y],'--k','LineWidth',1.5)
+% %     plot([x(pks(n,2)) x(pks(n,2))],[0 upper_y],'--r','LineWidth',1.5) % Location of peaks
+% end
+% 
+% set(fh,'units','normalized','position',[.1 .1 .8 .8])
+% set(gcf, 'PaperPositionMode', 'auto');
+% 
+% saveas(fh, ['../Walters/' num2str(run) 'Modern runs/' file ' frequency.fig'])
+% outputfilename = ['../Walters/' num2str(run) 'Modern runs/' file ' frequency'];
+% print('-dpng',outputfilename)
+%%%%%%%%%%%%%
+%%%%%%%%%%%%%
+%%%%%%%%%%%%%
+
+%%%Use code below to visualize frequency distribution for all widths,
+%%%except those with the narrow marsh as the initial condition
+
+% all_widths = [no_marsh ; wide_marsh];
+% 
+% fh = figure;
+% hold on
+% 
+%  % Set x- and y-limits and label the axes on the plot
+% [nn,x] = hist(all_widths(:,5),100);
+% upper_y = max(nn) + 25;
+% set(gca,'XLim',[-50 2000])
+% set(gca,'YLim',[0 upper_y])
+% ylabel('Frequency','FontSize',25); 
+% xlabel('Backbarrier marsh width (m)','FontSize',25);
+% 
+% pks = findpeaks(nn,3,perc);
+% 
+% stable_range = zeros(3,2);
+% 
+% for n = 1:3
+%     xx = [x(pks(n,2)-pks(n,3))-15 x(pks(n,2)-pks(n,3))-15 x(pks(n,2)+pks(n,4))+15 x(pks(n,2)+pks(n,4))+15];
+%     yy = [0 upper_y upper_y 0];
+%     h = fill(xx,yy,[.75 .75 .75]);
+%     set(h,'edgecolor',[.75 .75 .75])
+%     stable_range(n,:) = [xx(1) xx(4)];
+% end
+% 
+% hist(all_widths(:,5),100)
+% 
+% for n = 1:3
+%     plot([x(pks(n,2)) x(pks(n,2))],[0 upper_y],'--k','LineWidth',1.5)
+% end
+% 
+% set(gca,'FontSize',16)
+% set(fh,'units','normalized','position',[.1 .1 .8 .8])
+% set(gcf, 'PaperPositionMode', 'auto');
+
+%%% Use code below for plotting overwash and ESF voumes over marsh width frequency distribution
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%All initial conditions%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% [nn,x] = hist(all_widths(:,5),100);
+% x(nn==0) = [];
+% nn(nn==0) = [];
+% 
+OW_all_widths = all_widths(:,1);
+RI_all_widths = all_widths(:,3); %%%
+[sorted_widths,index] = sort(all_widths(:,5),1);
+OW_all_widths = OW_all_widths(index);
+RI_all_widths = RI_all_widths(index); %%%
+
+bracket = 100;
+index = 1;
+ii = 2;
+
+index = (0:length(all_widths)/bracket)*bracket;
+index(1) = 1;
+
+% avg_OW = zeros(length(index)-1,3);
+
+for i = 1:length(index)-1
+    avg_OW(i,1) = mean(OW_all_widths(index(i):index(i+1)));
+    avg_OW(i,2) = mean(sorted_widths(index(i):index(i+1)));
+end
+
+zi = 1;
+noi = 1;
+nari = 1;
+for i = 1:length(OW_all_widths)
+    if sorted_widths(i) > 600 & sorted_widths(i) < 900
+        z(zi,1) = OW_all_widths(i);
+        zi = zi+1;
+    elseif sorted_widths(i) > 0 & sorted_widths(i) < 75
+        no(noi,1) = OW_all_widths(i);
+        noi = noi + 1;
+    elseif sorted_widths(i) > 150 & sorted_widths(i) < 400
+        nar(nari,1) = OW_all_widths(i);
+        nari = nari + 1;
+    elseif sorted_widths(i) > 150 & sorted_widths(i) < 400
+        nar(nari,1) = OW_all_widths(i);
+        nari = nari + 1;
+    end
+end
+
+avg_OW
+figure
+plot(avg_OW(:,2),avg_OW(:,1))
+
+% ii = 1;
+% iii = 2;
+% n = 1;
+% average_ow(1) = OW_all_widths(1);
+% average_ri(1) = RI_all_widths(1); %%%
+% width = sorted_widths(1);
+% 
+% for i = 2:length(OW_all_widths)
+%     if sorted_widths(i) == sorted_widths(i-1);
+%         average_ow(iii) = OW_all_widths(i);
+%         average_ri(iii) = RI_all_widths(i); %%%
+%         i = i + 1;
+%         iii = iii + 1;
+%     else
+%         OW_sqz(ii) = mean(average_ow) + (11 - mean(average_ow)) * 0.95^numel(average_ow); % OW_sqz(ii) = mean(average_ow) + (11 - mean(average_ow)) * 0.1^(numel(average_ow)/20) ;
+%         RI_sqz(ii) = mean(average_ri) + (11 - mean(average_ri)) * 0.95^numel(average_ri); %%%
+%         average_ow = OW_all_widths(i);
+%         average_ri = RI_all_widths(i); %%%
+%         ii = ii + 1;
+%         width(ii) = sorted_widths(i);
+%         iii = 1;
+%     end
+% end
+% 
+% window = ceil((length(width)/length(x))/2);
+% OW_smooth = zeros(length(x),window*2);
+% 
+% for ix = 1:length(x)
+%     OW_smooth(ix,:) = OW_sqz((window*(ix-1)+1):(window*(ix+1)));
+% end
+% 
+% OW_smooth = wmean(OW_smooth,[.0015 .0035 .005 .01 .03 .45 .45 .03 .01 .005 .0035 .0015],2);
+% 
+% for in = 1:length(x)
+%     OW_smooth(in) = OW_smooth(in)+ (11 - mean(OW_smooth)) * 0.95^numel(nn(in));
+% end
+% 
+% OW_sqz(ii) = mean(average_ow)+ (11 - mean(average_ow)) * 0.95^numel(average_ow);
+% RI_sqz(ii) = mean(average_ri)+ (11 - mean(average_ri)) * 0.95^numel(average_ri); %%%
+% 
+% upper_y = max(nn)+50;
+% 
+% fh = figure;
+% [AX,H1,H2] = plotyy(x, nn, x, OW_smooth, @bar, @line); %[OW_sqz;RI_sqz]
+% set(AX(1),'XLim',[-50 2000])
+% set(AX(1),'YLim',[0 upper_y])
+% set(AX(2),'XLim',[-50 2000])
+% set(AX(2),'YLim',[3 17])
+% set(AX(1),'YTick',[0:200:upper_y])
+% set(AX(2),'YTick',[5:5:15])
+% set(findobj('Type','line'),'Color','r')
+% box(AX(1))
+% 
+% 
+% saveas(fh, ['../Walters/' num2str(run) 'Modern runs/Marsh width frequency_w_ParameterOverlay.fig'])
+% outputfilename = ['../Walters/' num2str(run) 'Modern runs/Marsh width frequency_w_ParameterOverlay'];
+% print('-dpng',outputfilename)
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% saveas(fh, ['../Walters/' num2str(run) 'Modern runs/Width frequency_all_w_ParameterOverlay.fig'])
+% outputfilename = ['../Walters/' num2str(run) 'Modern runs/Marsh width frequency_all_w_ParameterOverlay'];
+% print('-dpng',outputfilename)
